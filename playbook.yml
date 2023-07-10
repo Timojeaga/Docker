@@ -1,9 +1,19 @@
 ---
-- hosts: webserver
+- hosts: your_target_host
   gather_facts: no
   become: yes
 
   tasks:
+    - name: Copy Dockerfile to target host
+      copy:
+        src: /var/lib/jenkins/workspace/docker/Dockerfile
+        dest: /tmp
+
+    - name: Copy HTML file to target host
+      copy:
+        src: /var/lib/jenkins/workspace/docker/index.html
+        dest: /tmp
+
     - name: Install Docker and dependencies
       apt:
         name:
@@ -23,7 +33,7 @@
     - name: Build and push Docker image
       docker_image:
         build:
-          path: /var/lib/jenkins/worspace/docker
+          path: /tmp
         name: nevaly/nginx
         tag: v1
         force_source: yes
