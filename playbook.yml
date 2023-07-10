@@ -21,7 +21,7 @@
     - name: Build an image and push
       docker_image:
         build:
-          path: /var/lib/jenkins/workspace/docker
+          path: /var/lib/jenkins/workspace/docker/Dockerfile
         name: nevaly/nginx
         tag: v1
         force_source: yes
