@@ -2,7 +2,7 @@
 - hosts: webserver
   gather_facts: no
   become: yes
-  become_user: root
+  remote_user: ubuntu
 
   tasks:
     - name: Copy Dockerfile to target host
