@@ -15,15 +15,12 @@
         state: started
 
     - name: Build Docker image
-      docker_image:
-        build:
-          path: /var/lib/jenkins/workspace/docker
-          source: build
+      community.general.docker_build:
+        path: /var/lib/jenkins/workspace/docker
         name: nevaly/webapp
-        push: yes
 
     - name: Create Docker container
-      docker_container:
+      community.general.docker_container:
         name: webapp
         image: nevaly/webapp
         ports:
