@@ -18,6 +18,7 @@
 
         build:
           context: /var/lib/jenkins/workspace/docker # <-- add this line
+          path: /var/lib/jenkins/workspace/docker
 
     - name: Pull Docker image
       docker_image:
