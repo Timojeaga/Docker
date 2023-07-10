@@ -1,29 +1,38 @@
 ---
-- name: Deploy Docker image and container
-  hosts: all
-  become: true
-
+- hosts: webserver
+  gather_facts: no
+  remote_user: ubuntu
+  become: yes
   tasks:
-    - name: Install Docker
+    - name: Install docker and some dependencies
       apt:
-        name: docker.io
-        update_cache: yes
+        name: python3-pip, docker.io
+        state: present
 
-    - name: Start Docker service
+    - name: Start docker service
       service:
         name: docker
         state: started
 
-    - name: Build Docker image
-      community.general.docker_build:
-        path: /var/lib/jenkins/workspace/docker
-        name: nevaly/webapp
+    - name: Install docker python module
+      pip:
+        name: docker
 
-    - name: Create Docker container
-      community.general.docker_container:
-        name: webapp
-        image: nevaly/webapp
+    - name: Build an image and push
+      docker_image:
+        build:
+          path: /var/lib/jenkins/workspace/docker
+        name: nevaly/nginx
+        tag: v1
+        force_source: yes
+        push: yes
+        source: build
+    - name: Create a container
+      docker_container:
+        name: nevaly
+        image: nevaly/nginx:v1
+        state: started
+        recreate: yes
         ports:
           - "8080:80"
-        state: started
 
