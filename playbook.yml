@@ -15,14 +15,19 @@
         owner: ubuntu
         group: ubuntu
         mode: '0644'
+    - name: copy file
+      copy:
+        src: /var/lib/jenkins/workspace/docker/index.html
+        dest: /opt/docker
+        state: present
     - name: Run command on target
-      shell: docker build -t nevaly/webapp:v1 -f /opt/docker/Dockerfile .
+      shell: docker build -t nevaly/webapp -f /opt/docker/Dockerfile .
       args:
         executable: /bin/bash
     - name: Create docker container with image
       docker_container:
         name: webapp
-        image: webapp
+        image: nevaly/webapp
         state: started
         ports:
           - "8080:80"
