@@ -16,7 +16,7 @@
         group: ubuntu
         mode: '0644'
     - name: Run command on target
-      shell: docker build -t webapp /opt/docker/Dockerfile
+      shell: docker build -t webapp /opt/docker/Dockerfile .
       args:
         executable: /bin/bash
     - name: Create docker container with image
