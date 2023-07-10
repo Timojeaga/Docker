@@ -9,8 +9,7 @@
 
     - name: Build a Docker image
       docker_image:
-        build:
-          path: /var/lib/jenkins/workspace/demo
+        path: /var/lib/jenkins/workspace/demo
         name: nevaly/webapp
         tag: v1
         source: build
