@@ -10,7 +10,7 @@
         name: docker.io
     - name: Copy file to hosts machine
       copy:
-        src: "/var/lib/jenkins/workspace/docker/{{ items }}"
+        src: "/var/lib/jenkins/workspace/docker/{{ item }}"
         dest: /opt/docker/
         owner: ubuntu
         group: ubuntu
