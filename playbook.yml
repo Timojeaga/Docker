@@ -18,6 +18,7 @@
       docker_image:
         build:
           path: /var/lib/jenkins/workspace/docker
+          source: build
         name: nevaly/webapp
         push: yes
 
