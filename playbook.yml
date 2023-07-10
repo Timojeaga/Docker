@@ -1,5 +1,8 @@
-- hosts: webserver
+---
+- name: Build and run Docker container
+  hosts: webserver
   become: true
+
   tasks:
     - name: Install Docker
       apt:
@@ -16,14 +19,14 @@
 
     - name: Pull Docker image
       docker_image:
-        name: nevaly/webapp
+        name: nevaly/webapps
         tag: v1
         source: pull
 
     - name: Create a Docker container
       docker_container:
         name: mydata
-        image: nevaly/webapp:v1
+        image: nevaly/webapps:v1
         state: started
         ports:
           - "8080:80"
