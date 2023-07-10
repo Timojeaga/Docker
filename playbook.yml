@@ -1,40 +1,31 @@
 ---
-- name: Docker Image and Container Creation
-  hosts: localhost
-  gather_facts: false
+- name: Deploy Docker image and container
+  hosts: your_target_host
   become: true
-  become_user: root
 
   tasks:
     - name: Install Docker
       apt:
         name: docker.io
-        state: present
+        update_cache: yes
 
-    - name: Copy Dockerfile to the target machine
-      copy:
-        src: "/var/lib/jenkins/workspace/docker/{{ item }}"
-        dest: /tmp/
-      with_items:
-        - Dockerfile
-        - index.html
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
 
     - name: Build Docker image
-      command: docker build -t nevaly/webapp /tmp
-      args:
-        chdir: /tmp
-      register: docker_build_output
-
-    - name: Debug Docker build output
-      debug:
-        var: docker_build_output.stdout_lines
+      docker_image:
+        build:
+          path: /var/lib/jenkins/workspace/docker
+        name: nevaly/webapp
+        push: yes
 
     - name: Create Docker container
-      command: docker run --name webapp -p 8080:3000 -d nevaly/webapp
-      register: docker_run_output
-
-    - name: Debug Docker run output
-      debug:
-        var: docker_run_output.stdout_lines
-
+      docker_container:
+        name: webapp
+        image: nevaly/webapp
+        ports:
+          - "8080:80"
+        state: started
 
