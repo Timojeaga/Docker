@@ -11,14 +11,13 @@
 
     - name: Build a Docker image
       docker_image:
-        path: /var/lib/jenkins/workspace/docker # <-- move under build:
         name: nevaly/webapps
         tag: v1
         push: true
         source: build
 
         build:
-          path: /var/lib/jenkins/workspace/docker # <-- add this line
+          context: /var/lib/jenkins/workspace/docker # <-- add this line
 
     - name: Pull Docker image
       docker_image:
