@@ -16,9 +16,7 @@
 
     - name: Install Docker and dependencies
       apt:
-        name:
-          - python3-pip
-          - docker.io
+        name: python3-pip, docker.io
         state: present
 
     - name: Start Docker service
