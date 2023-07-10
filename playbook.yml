@@ -1,6 +1,6 @@
 ---
 - name: Deploy Docker image and container
-  hosts: your_target_host
+  hosts: all
   become: true
 
   tasks:
