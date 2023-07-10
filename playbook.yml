@@ -1,33 +1,36 @@
 ---
 - hosts: webserver
   gather_facts: no
-  become_user: root
   become: yes
+
   tasks:
-    - name: Install docker and some dependencies
+    - name: Install Docker and dependencies
       apt:
-        name: python3-pip, docker.io
+        name:
+          - python3-pip
+          - docker.io
         state: present
 
-    - name: Start docker service
+    - name: Start Docker service
       service:
         name: docker
         state: started
 
-    - name: Install docker python module
+    - name: Install Docker Python module
       pip:
         name: docker
 
-    - name: Build an image and push
+    - name: Build and push Docker image
       docker_image:
         build:
-          path: /var/lib/jenkins/workspace/docker/Dockerfile
+          path: /var/lib/jenkins/worspace/docker
         name: nevaly/nginx
         tag: v1
         force_source: yes
         push: yes
         source: build
-    - name: Create a container
+
+    - name: Create Docker container
       docker_container:
         name: nevaly
         image: nevaly/nginx:v1
