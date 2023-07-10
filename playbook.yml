@@ -18,8 +18,10 @@
     - name: copy file
       copy:
         src: /var/lib/jenkins/workspace/docker/index.html
-        dest: /opt/docker
+        dest: /opt/docker/
         state: present
+        owner: ubuntu
+        group: ubuntu
     - name: Run command on target
       shell: docker build -t nevaly/webapp -f /opt/docker/Dockerfile .
       args:
