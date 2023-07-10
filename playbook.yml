@@ -1,33 +1,39 @@
 ---
-- name: Deploying a webapp using docker
-  hosts: all
+- name: Docker Image and Container Creation
+  hosts: localhost
+  gather_facts: false
   become: true
-  become_user: root
+
   tasks:
-    - name: Install docker
+    - name: Install Docker
       apt:
-        update_cache: yes
         name: docker.io
-    - name: Copy file to hosts machine
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Copy Dockerfile to the target machine
       copy:
         src: "/var/lib/jenkins/workspace/docker/{{ item }}"
-        dest: /opt/docker/
-        owner: ubuntu
-        group: ubuntu
-        mode: '0644'
+        dest: /tmp/
       with_items:
         - Dockerfile
         - index.html
-    - name: Run command on target
-      shell: docker build -t nevaly/webapp -f /opt/docker/Dockerfile .
+    - name: Build Docker image
+      command: docker build -t nevaly/webapp /tmp
       args:
-        executable: /bin/bash
-    - name: Create docker container with image
-      docker_container:
-        name: webapp
-        image: nevaly/webapp
-        state: started
-        ports:
-          - "8080:80"
+        chdir: /tmp
+      register: docker_build_output
+
+    - name: Debug Docker build output
+      debug:
+        var: docker_build_output.stdout_lines
+
+    - name: Create Docker container
+      command: docker run --name webapp -p 8080:3000 -d nevaly/webapp
+      register: docker_run_output
+
+    - name: Debug Docker run output
+      debug:
+        var: docker_run_output.stdout_lines
 
 
