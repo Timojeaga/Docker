@@ -1,4 +1,3 @@
----
 - name: Build and run Docker container
   hosts: webserver
   become: true
@@ -16,6 +15,7 @@
         name: nevaly/webapps
         tag: v1
         push: true
+        source: build # <-- add this line
 
     - name: Pull Docker image
       docker_image:
