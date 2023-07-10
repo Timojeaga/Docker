@@ -1,0 +1,24 @@
+- hosts: webserver
+  become: true
+  tasks:
+    - name: install docker
+      apt:
+        update_cache: yes
+        name: docker.io
+        state: present
+    - name: Build a docker image
+      docker_image:
+        build:
+          path: /var/lib/jenkins/worspace/demo
+        name: nevaly/webapp
+        tag: v1
+        push: yes
+        source: build
+        dockerfile: present
+    - name: create a docker container
+      docker_container:
+        name: mydata
+        image: nevaly/webapp:v1
+        state: present
+        ports:
+          - "8080:80"
