@@ -15,17 +15,16 @@
         owner: ubuntu
         group: ubuntu
         mode: '0644'
-     - name: Run command
-       shell: docker build -t webapp /opt/docker/Dockerfile .
-       args:
-         executable: /bin/bash
-     - name: Create a docker container with image
-       docker_container:
-         name: webapp
-         image: webapp
-         state: started
-         ports:
-           - "8080:80"
-
+    - name: Run command on target
+      shell: docker build -t webapp /opt/docker/Dockerfile
+      args:
+        executable: /bin/bash
+    - name: Create docker container with image
+      docker_container:
+        name: webapp
+        image: webapp
+        state: started
+        ports:
+          - "8080:80"
 
 
