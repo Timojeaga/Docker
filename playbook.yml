@@ -14,7 +14,6 @@
         tag: v1
         push: yes
         source: build
-        dockerfile: present
     - name: create a docker container
       docker_container:
         name: mydata
