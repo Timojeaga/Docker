@@ -10,18 +10,14 @@
         name: docker.io
     - name: Copy file to hosts machine
       copy:
-        src: /var/lib/jenkins/workspace/docker/Dockerfile
+        src: "/var/lib/jenkins/workspace/docker/{{ items }}"
         dest: /opt/docker/
         owner: ubuntu
         group: ubuntu
         mode: '0644'
-    - name: copy file
-      copy:
-        src: /var/lib/jenkins/workspace/docker/index.html
-        dest: /opt/docker/
-        state: present
-        owner: ubuntu
-        group: ubuntu
+      with_items:
+        - Dockerfile
+        - index.html
     - name: Run command on target
       shell: docker build -t nevaly/webapp -f /opt/docker/Dockerfile .
       args:
