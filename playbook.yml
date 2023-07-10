@@ -10,11 +10,10 @@
         state: present
 
     - name: Build a Docker image
-      docker_build:
-        path: /var/lib/jenkins/workspace/docker  # Replace with the actual path to your Dockerfile
-        image: nevaly/webapps
-        tag: v1
-        push: true
+      command: docker build -t nevaly/webapps:v1 /var/lib/jenkins/workspace/docker
+      args:
+        executable: /bin/bash
+        creates: /var/lib/jenkins/workspace/docker/Dockerfile
 
     - name: Pull Docker image
       docker_image:
