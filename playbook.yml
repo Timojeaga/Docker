@@ -10,15 +10,11 @@
         state: present
 
     - name: Build a Docker image
-      docker_image:
-        name: nevaly/webapps
+      docker_build:
+        path: /var/lib/jenkins/workspace/docker  # Replace with the actual path to your Dockerfile
+        image: nevaly/webapps
         tag: v1
         push: true
-        source: build
-
-        build:
-          context: /var/lib/jenkins/workspace/docker # <-- add this line
-          path: /var/lib/jenkins/workspace/docker
 
     - name: Pull Docker image
       docker_image:
