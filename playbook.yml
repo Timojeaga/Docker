@@ -1,0 +1,30 @@
+---
+- name: Deploying a webapp using docker
+  hosts: all
+  become: true
+  tasks:
+    - name: Install docker
+      apt:
+        update_cache: yes
+        name: docker.io
+    - name: Copy file to hosts machine
+      copy:
+        src: /var/lib/jenkins/workspace/docker/Dockerfile
+        dest: /opt/docker/
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+     - name: Run command
+       shell: docker build -t webapp /opt/docker/Dockerfile .
+       args:
+         executable: /bin/bash
+     - name: Create a docker container with image
+       docker_container:
+         name: webapp
+         image: webapp
+         state: started
+         ports:
+           - "8080:80"
+
+
+
