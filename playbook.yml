@@ -2,6 +2,7 @@
 - name: Deploying a webapp using docker
   hosts: all
   become: true
+  become_user: root
   tasks:
     - name: Install docker
       apt:
