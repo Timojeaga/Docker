@@ -9,10 +9,11 @@
 
     - name: Build a Docker image
       docker_image:
-        path: /var/lib/jenkins/workspace/demo
-        name: nevaly/webapp
-        tag: v1
-        source: build
+        name: nevaly/webapps
+        build:
+          path: /var/lib/jenkins/workspace/docker
+          source: build
+        state: present
 
     - name: Pull Docker image
       docker_image:
