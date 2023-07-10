@@ -12,7 +12,6 @@
         path: /var/lib/jenkins/workspace/demo
         name: nevaly/webapp
         tag: v1
-        source: build
 
     - name: Pull Docker image
       docker_image:
