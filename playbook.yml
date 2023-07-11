@@ -1,50 +1,36 @@
 ---
-- hosts: webserver
-  gather_facts: no
-  become: yes
-  remote_user: ubuntu
-
+- hosts: all
+  become: true
   tasks:
-    - name: Copy Dockerfile to target host
-      copy:
-        src: /var/lib/jenkins/workspace/docker/Dockerfile
-        dest: /tmp
-
-    - name: Copy HTML file to target host
-      copy:
-        src: /var/lib/jenkins/workspace/docker/index.html
-        dest: /tmp
-
-    - name: Install Docker and dependencies
+    - name: install docker sdk
       apt:
-        name: python3-pip, docker.io
-        state: present
-
-    - name: Start Docker service
-      service:
-        name: docker
-        state: started
-
-    - name: Install Docker Python module
-      pip:
-        name: docker
-
-    - name: Build and push Docker image
+        name: python3-docker, docker.io
+        cache_update: yes
+        cache_valid_time: 3600
+    - name: create file
+      file:
+        path: /tmp/docker
+        state: directory
+    - name: copy files
+      copy:
+        src: "/var/lib/jenkins/workspace/docker/{{ item }}"
+        dest: /tmp/docker
+        owner: ubuntu
+      with_items:
+        - Dockerfile
+        - index.html
+    - name: build image
       docker_image:
-        build:
-          path: /tmp
-        name: nevaly/nginx
-        tag: v1
-        force_source: yes
-        push: yes
-        source: build
-
-    - name: Create Docker container
-      docker_container:
         name: nevaly
-        image: nevaly/nginx:v1
+        tag: v1.0
+        source: build
+        build:
+          path: /tmp/docker/
+          dockerfile: Dockerfile
+    - name: run container
+      docker:
+        name: demo
+        image: nevaly:v1.0
         state: started
-        recreate: yes
         ports:
           - "8080:80"
-
