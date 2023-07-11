@@ -5,7 +5,7 @@
     - name: install docker sdk
       apt:
         name: python3-docker, docker.io
-        cache_update: yes
+        update_cache: yes
         cache_valid_time: 3600
 
     - name: create file
