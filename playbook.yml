@@ -7,10 +7,12 @@
         name: python3-docker, docker.io
         cache_update: yes
         cache_valid_time: 3600
+
     - name: create file
       file:
         path: /tmp/docker
         state: directory
+
     - name: copy files
       copy:
         src: "/var/lib/jenkins/workspace/docker/{{ item }}"
@@ -19,6 +21,7 @@
       with_items:
         - Dockerfile
         - index.html
+
     - name: build image
       docker_image:
         name: nevaly
@@ -27,10 +30,3 @@
         build:
           path: /tmp/docker/
           dockerfile: Dockerfile
-    - name: run container
-      docker:
-        name: demo
-        image: nevaly:v1.0
-        state: started
-        ports:
-          - "8080:80"
