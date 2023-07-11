@@ -24,7 +24,7 @@
 
     - name: build image
       docker_image:
-        name: nevaly
+        name: timojeaga
         tag: v1.0
         source: build
         build:
